@@ -141,7 +141,6 @@ public class MethodCallHandlerImpl implements MethodCallHandler, StateProvider {
     if (mFactory != null) {
       return;
     }
-
     PeerConnectionFactory.initialize(
             InitializationOptions.builder(context)
                     .setEnableInternalTracer(true)
@@ -160,8 +159,11 @@ public class MethodCallHandlerImpl implements MethodCallHandler, StateProvider {
 
     getUserMediaImpl.audioDeviceModule = (JavaAudioDeviceModule) audioDeviceModule;
 
+    PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
+    options.disableNetworkMonitor = true;
+
     mFactory = PeerConnectionFactory.builder()
-            .setOptions(new Options())
+            .setOptions(options)
             .setVideoEncoderFactory(new SimulcastVideoEncoderFactoryWrapper(eglContext, true, true))
             .setVideoDecoderFactory(new DefaultVideoDecoderFactory(eglContext))
             .setAudioDeviceModule(audioDeviceModule)
